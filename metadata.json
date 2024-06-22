@@ -1,12 +1,12 @@
 [
   {
-    file: "2.png",
-    name: "Gambar 2",
-    date: "13/01/24"
+    "file": "2.png",
+    "name": "Gambar 2",
+    "date": "13/01/24"
   },
   {
-    file: "3.png",
-    name: "Gambar 3",
-    date: "12/01/24"
+    "file": "3.png",
+    "name": "Gambar 3",
+    "date": "12/01/24"
   }
 ]
