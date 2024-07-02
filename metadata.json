@@ -1,27 +1,41 @@
-[
-  {
-    "file": "2.png",
-    "name": "Gambar 2",
-    "date": "12/06/24"
-  },
-  {
-    "file": "3.png",
-    "name": "Gambar 3",
-    "date": "13/06/24"
-  },
-   {
-    "file": "4.png",
-    "name": "Gambar 4",
-    "date": "14/06/24"
-  },
-   {
-    "file": "5.png",
-    "name": "Gambar 5",
-    "date": "15/06/24"
-  },
-   {
-    "file": "6.png",
-    "name": "Gambar 6",
-    "date": "16/06/24"
-  }
-]
+import os
+import json
+import subprocess
+from datetime import datetime
+
+# Path to your JSON file
+json_file_path = 'images.json'
+
+# Function to get the list of new image files
+def get_new_images():
+    result = subprocess.run(['git', 'diff', '--name-only', '--diff-filter=A', 'HEAD~1..HEAD'], stdout=subprocess.PIPE)
+    new_files = result.stdout.decode('utf-8').split('\n')
+    new_images = [f for f in new_files if f.lower().endswith(('.png', '.jpg', '.jpeg', '.gif'))]
+    return new_images
+
+# Function to update the JSON file
+def update_json_file(new_images):
+    if os.path.exists(json_file_path):
+        with open(json_file_path, 'r') as f:
+            data = json.load(f)
+    else:
+        data = []
+
+    for image in new_images:
+        image_info = {
+            "file": image,
+            "name": os.path.basename(image),
+            "date": datetime.now().strftime('%d/%m/%y')
+        }
+        data.append(image_info)
+
+    with open(json_file_path, 'w') as f:
+        json.dump(data, f, indent=2)
+
+def main():
+    new_images = get_new_images()
+    if new_images:
+        update_json_file(new_images)
+
+if __name__ == "__main__":
+    main()
